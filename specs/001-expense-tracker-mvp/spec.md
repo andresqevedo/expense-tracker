@@ -186,7 +186,7 @@ budgeted amount and flags whether the category is over budget.
   another user's expense or budget directly (e.g., by guessing an
   identifier)?
 - When a category's actual spending exactly equals its budget (both
-  compared at 2 decimal places, per FR-007), the difference is 0.00 and
+  compared at 2 decimal places, per FR-007a), the difference is 0.00 and
   the category is shown as exactly on budget (neither over nor under).
 - What happens when a user requests a monthly summary or budget comparison
   for a month with no budgets and no expenses at all?

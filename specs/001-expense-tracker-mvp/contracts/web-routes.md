@@ -22,7 +22,7 @@ protected routes.
 
 | Method & Path | Auth | Request | Response | Spec refs |
 |---|---|---|---|---|
-| `GET /expenses` | required | optional `?month=YYYY-MM` (defaults to current month's list scope is not filtered — full history, most recent first) | Expense list page (empty state if none) | US3; FR-009, FR-010 |
+| `GET /expenses` | required | — (no month filter; always the user's full expense history) | Expense list page, most recent first (empty state if none) | US3; FR-009, FR-010 |
 | `GET /expenses/new` | required | — | Add-expense form (category options = the 7 fixed categories; date defaults to, and is fixed at, today) | US2 |
 | `POST /expenses` | required | `amount`, `category_id`, `date`, `description?` (form-encoded); `amount` submitted with more than 2 decimal places is rounded down to 2 before validation/storage (FR-007a) | 302 → `/expenses` on success; 200 + form re-rendered with field errors on non-positive amount, missing category, or date ≠ today/invalid | US2 scenarios 1-4; FR-006, FR-007, FR-007a, FR-008 |
 
