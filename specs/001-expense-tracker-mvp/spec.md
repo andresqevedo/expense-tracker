@@ -16,7 +16,7 @@
 - Q: When a user sets a new budget for a category that already has a budget for the currently-viewed month, does the new amount replace the old one for that same month too, or only for future months? → A: Per-month budget history — updating only affects the current month and future months; past months keep the value that was active then
 - Q: Should the system reject an expense submission whose date is in the future, or is any date (past, present, or future) allowed? → A: Reject any date other than today (no past, no future); also reject any value that is not a valid date
 - Q: What are the minimum password requirements for registration? → A: Minimum 8 characters plus at least one letter and one number
-- Q: How should amounts (expense amounts and budget amounts) be handled for decimal precision? → A: Exactly 2 decimal places (e.g., 12.34); more precision is rejected, fewer is padded
+- Q: How should amounts (expense amounts and budget amounts) be handled for decimal precision? → A: Exactly 2 decimal places (e.g., 12.34); more precision is rounded down (truncated) to 2 decimal places, fewer is padded
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -212,9 +212,12 @@ budgeted amount and flags whether the category is over budget.
   consisting of an amount, a category, and a date, with an optional
   description.
 - **FR-007**: System MUST reject an expense submission that has a
-  non-positive amount, an amount with more than 2 decimal places, a
-  missing category, a missing date, an invalid (non-date) date value, or a
-  date other than the current day, and MUST indicate what is invalid.
+  non-positive amount, a missing category, a missing date, an invalid
+  (non-date) date value, or a date other than the current day, and MUST
+  indicate what is invalid.
+- **FR-007a**: System MUST round down (truncate) an amount submitted with
+  more than 2 decimal places to exactly 2 decimal places before storing
+  it, rather than rejecting it.
 - **FR-008**: System MUST associate every recorded expense with exactly
   the user who created it.
 - **FR-009**: System MUST allow a logged-in user to view a list of their
@@ -243,9 +246,10 @@ budgeted amount and flags whether the category is over budget.
   address and a password credential. Owns all of their own expenses and
   budgets; no other user can see or modify them.
 - **Expense**: A single recorded transaction belonging to one user,
-  consisting of an amount (a positive value with exactly 2 decimal
-  places), a category, a date, and an optional description. Used to
-  compute monthly per-category totals.
+  consisting of an amount (a positive value stored with exactly 2 decimal
+  places — a submitted value with more precision is rounded down to 2
+  decimal places rather than rejected), a category, a date, and an
+  optional description. Used to compute monthly per-category totals.
 - **Category**: A named grouping used to classify expenses and budgets.
   The fixed set, shared across all users and not owned by any one user, is
   exactly: Food, Transportation, Housing, Utilities, Entertainment, Health,
