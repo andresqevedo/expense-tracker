@@ -18,6 +18,13 @@
 - Q: What are the minimum password requirements for registration? → A: Minimum 8 characters plus at least one letter and one number
 - Q: How should amounts (expense amounts and budget amounts) be handled for decimal precision? → A: Exactly 2 decimal places (e.g., 12.34); more precision is rounded down (truncated) to 2 decimal places, fewer is padded
 
+### Session 2026-09-03
+
+- Q: What JWT signing algorithm and token expiration should the auth cookie use? → A: HS256, 24-hour expiration
+- Q: Is "today" for the expense-date rule (FR-007) the server's UTC calendar day, or should it account for the user's local timezone? → A: Server UTC calendar day
+- Q: Should a user be able to remove/unset a previously-set budget for a category (returning it to "no budget set"), or is that out of scope for the MVP? → A: Out of scope for the MVP; only setting/updating an amount is supported
+- Q: How should the system handle a user trying to access another user's expense/budget by guessing an identifier, given the current route design? → A: N/A by design — no MVP route accepts an expense/budget ID belonging to another user; list routes are always scoped to the current user and POST routes never take a target record ID, so no additional authorization check is needed
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Register and Log In (Priority: P1)
@@ -182,9 +189,12 @@ budgeted amount and flags whether the category is over budget.
 
 - What happens when a user tries to register with an invalid email format?
   (Password minimum strength is defined in FR-001a.)
-- How does the system handle a user attempting to view, edit, or delete
-  another user's expense or budget directly (e.g., by guessing an
-  identifier)?
+- A user cannot view, edit, or delete another user's expense or budget by
+  guessing an identifier: no route in this MVP accepts an expense or
+  budget identifier belonging to another user — list views are always
+  scoped to the current user, and submission routes never take a target
+  record identifier — so this is resolved by route design rather than a
+  separate authorization check.
 - When a category's actual spending exactly equals its budget (both
   compared at 2 decimal places, per FR-007a), the difference is 0.00 and
   the category is shown as exactly on budget (neither over nor under).
@@ -213,8 +223,10 @@ budgeted amount and flags whether the category is over budget.
   description.
 - **FR-007**: System MUST reject an expense submission that has a
   non-positive amount, a missing category, a missing date, an invalid
-  (non-date) date value, or a date other than the current day, and MUST
-  indicate what is invalid.
+  (non-date) date value, or a date other than the current day — where
+  "current day" means the server's UTC calendar day at submission time,
+  not the submitting user's local timezone — and MUST indicate what is
+  invalid.
 - **FR-007a**: System MUST round down (truncate) an amount submitted with
   more than 2 decimal places to exactly 2 decimal places before storing
   it, rather than rejecting it.
@@ -298,6 +310,12 @@ budgeted amount and flags whether the category is over budget.
   registration and login are included.
 - Editing or deleting an already-recorded expense is out of scope for this
   MVP; only adding and listing expenses is included.
+- Removing/unsetting a previously-set budget (returning a category to "no
+  budget set") is out of scope for this MVP; only setting and updating a
+  budget amount is supported once one exists for a category.
+- Login sessions are backed by a JWT signed with HS256 and a 24-hour
+  expiration; a user must log in again once their token expires, since no
+  refresh-token mechanism is included in this MVP.
 - Each user's data (expenses and budgets) is private to that user; there is
   no sharing, household, or multi-user grouping in this MVP.
 - Standard web application expectations apply for performance and error

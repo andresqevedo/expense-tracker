@@ -30,12 +30,12 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create the project skeleton directories per plan.md § Project Structure: `app/`, `app/models/`, `app/schemas/`, `app/security/`, `app/routers/`, `app/templates/`, `app/static/`, `alembic/versions/`, `tests/`
-- [ ] T002 Initialize `pyproject.toml` with Python 3.12 and dependencies: fastapi, uvicorn, sqlalchemy[asyncio]>=2.0, alembic, asyncpg, jinja2, python-multipart, pydantic>=2, pydantic-settings, python-jose[cryptography], passlib[bcrypt], pytest, pytest-asyncio, httpx
-- [ ] T003 [P] Write `docker-compose.yml` defining the `db` (postgres:16, named volume, healthcheck) and `app` (build from `Dockerfile`, depends_on db healthy, env from `.env`) services
-- [ ] T004 [P] Write `Dockerfile` for the FastAPI app (Python 3.12 base, install deps from pyproject.toml, run `uvicorn app.main:app`)
-- [ ] T005 [P] Write `.env.example` with `DATABASE_URL`, `JWT_SECRET_KEY`, `JWT_ALGORITHM` placeholders; confirm `.env` is listed in `.gitignore`
-- [ ] T006 [P] Configure pytest (`pyproject.toml` `[tool.pytest.ini_options]` or `pytest.ini`): `asyncio_mode = auto`, `testpaths = ["tests"]`
+- [X] T001 Create the project skeleton directories per plan.md § Project Structure: `app/`, `app/models/`, `app/schemas/`, `app/security/`, `app/routers/`, `app/templates/`, `app/static/`, `alembic/versions/`, `tests/`
+- [X] T002 Initialize `pyproject.toml` with Python 3.12 and dependencies: fastapi, uvicorn, sqlalchemy[asyncio]>=2.0, alembic, asyncpg, jinja2, python-multipart, pydantic>=2, pydantic-settings, python-jose[cryptography], passlib[bcrypt], pytest, pytest-asyncio, httpx
+- [X] T003 [P] Write `docker-compose.yml` defining the `db` (postgres:16, named volume, healthcheck) and `app` (build from `Dockerfile`, depends_on db healthy, env from `.env`) services
+- [X] T004 [P] Write `Dockerfile` for the FastAPI app (Python 3.12 base, install deps from pyproject.toml, run `uvicorn app.main:app`)
+- [X] T005 [P] Write `.env.example` with `DATABASE_URL`, `JWT_SECRET_KEY`, `JWT_ALGORITHM` placeholders; confirm `.env` is listed in `.gitignore`
+- [X] T006 [P] Configure pytest (`pyproject.toml` `[tool.pytest.ini_options]` or `pytest.ini`): `asyncio_mode = auto`, `testpaths = ["tests"]`
 
 **Checkpoint**: `docker compose build` succeeds (no runtime wiring yet).
 

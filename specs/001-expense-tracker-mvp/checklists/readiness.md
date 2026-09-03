@@ -22,7 +22,7 @@ complete.
 - [ ] CHK001 Are password hashing algorithm requirements (e.g., minimum
       work factor) specified anywhere, or left entirely to implementation
       discretion? [Gap, Spec §FR-001a, research.md §2]
-- [ ] CHK002 Is the JWT signing algorithm and token expiration/lifetime
+- [x] CHK002 Is the JWT signing algorithm and token expiration/lifetime
       specified at the requirements level? [Gap, research.md §1]
 - [ ] CHK003 Are requirements defined for what a user experiences when
       their auth cookie is present but expired or invalid (e.g., redirect
@@ -36,7 +36,7 @@ complete.
 - [ ] CHK006 Are requirements defined for concurrent sessions (e.g.,
       logging in from a second browser) — explicitly allowed, or silent
       on the question? [Gap, Edge Case]
-- [ ] CHK007 Is the distinction between "not signed in" and "signed in as
+- [x] CHK007 Is the distinction between "not signed in" and "signed in as
       the wrong user" specified for a direct attempt to access another
       user's expense/budget by guessing an identifier? [Ambiguity, Spec
       Edge Cases, §FR-010]
@@ -67,7 +67,7 @@ complete.
 - [ ] CHK012 Are requirements defined for what a user sees when viewing a
       future month's budget-vs-actual before any expenses exist for it?
       [Gap, Coverage]
-- [ ] CHK013 Is it specified whether a user can remove/unset a
+- [x] CHK013 Is it specified whether a user can remove/unset a
       previously-set budget (returning a category to "no budget set"), or
       is removal explicitly out of scope? [Gap]
 - [ ] CHK014 Does User Story 5's acceptance scenarios cover updating a
@@ -77,7 +77,7 @@ complete.
 
 ## Data Model & Business Rules — Date Validation
 
-- [ ] CHK015 Is "today" defined against a specific time zone (server UTC
+- [x] CHK015 Is "today" defined against a specific time zone (server UTC
       vs. the user's local time) for the "date must equal the current day"
       rule? [Ambiguity, Spec §FR-007]
 - [ ] CHK016 Is behavior specified for a submission that straddles

@@ -12,7 +12,11 @@ decisions needed before design.
 `HttpOnly`, `Secure`, `SameSite=Lax` cookie (`access_token`). A FastAPI
 dependency reads the JWT from that cookie (falling back to an
 `Authorization: Bearer` header, to keep the mechanism usable by non-browser
-clients/tests) and resolves the current user.
+clients/tests) and resolves the current user. The token is signed with
+HS256 using the constitution's single JWT signing-key secret, and expires
+24 hours after issuance (per Clarifications, Session 2026-09-03); there is
+no refresh-token mechanism in this MVP, so an expired token requires a
+fresh login.
 
 **Rationale**: The spec's UI is server-rendered HTML with plain CSS — no
 JavaScript layer to attach an `Authorization` header to on every request.
