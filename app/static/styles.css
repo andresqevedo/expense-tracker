@@ -1,0 +1,112 @@
+:root {
+    color-scheme: light;
+    --color-bg: #f7f7f8;
+    --color-surface: #ffffff;
+    --color-text: #1c1c1e;
+    --color-muted: #6b6b70;
+    --color-border: #dcdce0;
+    --color-primary: #2f6feb;
+    --color-danger: #c0392b;
+    --color-success: #1e8e3e;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.site-header .brand {
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.site-header nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.site-header nav a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.logout-form {
+    margin: 0;
+}
+
+main {
+    max-width: 720px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 420px;
+}
+
+label {
+    font-weight: 500;
+}
+
+input, select, button {
+    font: inherit;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+}
+
+button {
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.error {
+    color: var(--color-danger);
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    color: var(--color-muted);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.status-over {
+    color: var(--color-danger);
+}
+
+.status-under, .status-on-budget {
+    color: var(--color-success);
+}

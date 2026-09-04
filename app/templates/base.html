@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Expense Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="/expenses">Expense Tracker</a>
+        <nav>
+            <a href="/expenses">Expenses</a>
+            <a href="/expenses/new">Add Expense</a>
+            <a href="/summary">Monthly Summary</a>
+            <a href="/budgets">Budgets</a>
+            <form method="post" action="/logout" class="logout-form">
+                <button type="submit">Log out</button>
+            </form>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
