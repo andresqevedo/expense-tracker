@@ -24,13 +24,13 @@ complete.
       discretion? [Gap, Spec §FR-001a, research.md §2]
 - [x] CHK002 Is the JWT signing algorithm and token expiration/lifetime
       specified at the requirements level? [Gap, research.md §1]
-- [ ] CHK003 Are requirements defined for what a user experiences when
+- [x] CHK003 Are requirements defined for what a user experiences when
       their auth cookie is present but expired or invalid (e.g., redirect
       to `/login` vs. a raw error)? [Gap, Coverage]
-- [ ] CHK004 Does FR-004's "without revealing which field was wrong"
+- [x] CHK004 Does FR-004's "without revealing which field was wrong"
       requirement match the response behavior documented for
       `POST /login`? [Consistency, Spec §FR-004, contracts/web-routes.md]
-- [ ] CHK005 Are logout requirements explicit that the auth credential
+- [x] CHK005 Are logout requirements explicit that the auth credential
       (cookie) must be invalidated/cleared, not just that the user is
       redirected? [Completeness, Spec §FR-005]
 - [ ] CHK006 Are requirements defined for concurrent sessions (e.g.,
@@ -49,7 +49,7 @@ complete.
       data-model.md §Expense] — Resolved: the rule is round down
       (truncate) to 2 decimal places, not reject; spec.md (FR-007a),
       data-model.md, and contracts/web-routes.md now agree.
-- [ ] CHK009 Is "expressible in exactly 2 decimal places" defined
+- [x] CHK009 Is "expressible in exactly 2 decimal places" defined
       precisely enough that a reviewer can classify any given input
       (accept/reject) without relying on an example that contradicts the
       stated rule? [Clarity, Spec §Clarifications]
@@ -59,18 +59,18 @@ complete.
 
 ## Data Model & Business Rules — Budget History
 
-- [ ] CHK011 Is it specified whether a user can set a budget for a future
+- [x] CHK011 Is it specified whether a user can set a budget for a future
       month directly, or is "applies to current and future months" solely
       a consequence of the forward-fill resolution rule with no explicit
       requirement covering a direct future-month edit? [Ambiguity, Spec
       §FR-013, data-model.md §Budget]
-- [ ] CHK012 Are requirements defined for what a user sees when viewing a
+- [x] CHK012 Are requirements defined for what a user sees when viewing a
       future month's budget-vs-actual before any expenses exist for it?
       [Gap, Coverage]
 - [x] CHK013 Is it specified whether a user can remove/unset a
       previously-set budget (returning a category to "no budget set"), or
       is removal explicitly out of scope? [Gap]
-- [ ] CHK014 Does User Story 5's acceptance scenarios cover updating a
+- [x] CHK014 Does User Story 5's acceptance scenarios cover updating a
       budget more than once within the same month (confirming it updates
       the existing month's value rather than creating a duplicate)? [Gap,
       Coverage, Spec §US5]
@@ -91,7 +91,7 @@ complete.
       sections? [Consistency, plan.md §Constitution Check, §Project
       Structure] — Resolved: Constitution Check corrected to `.env.example`
       to match Project Structure.
-- [ ] CHK018 Are the 7 fixed category values referenced identically (same
+- [x] CHK018 Are the 7 fixed category values referenced identically (same
       names) across spec.md, data-model.md, and research.md? [Consistency]
 
 ## Acceptance Criteria Quality
@@ -100,7 +100,7 @@ complete.
       (SC-002) targets paired with a defined measurement method (e.g.,
       wall-clock from page load to confirmation), or stated without one?
       [Measurability, Spec §SC-001, §SC-002]
-- [ ] CHK020 Is "0% of expenses or budgets... visible to another account"
+- [x] CHK020 Is "0% of expenses or budgets... visible to another account"
       (SC-005) paired with a defined verification method (e.g., which
       test scenarios are sufficient to claim this is met)? [Measurability,
       Spec §SC-005]

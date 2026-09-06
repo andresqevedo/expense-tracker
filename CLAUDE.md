@@ -35,7 +35,8 @@ docker compose up -d --build
 docker compose exec app pytest
 ```
 
-Once the suite passes, tear the stack down with `docker compose down` so no
-containers are left running in the background. If the suite fails, leave the
-stack up so the `db`/`app` containers and logs are available for debugging —
-only tear down after a fix produces a passing run.
+Once the suite passes, stop the stack with `docker compose stop` so no
+containers are left running in the background — do NOT use `docker compose
+down`, which removes the containers rather than just stopping them. If the
+suite fails, leave the stack up so the `db`/`app` containers and logs are
+available for debugging — only stop it after a fix produces a passing run.

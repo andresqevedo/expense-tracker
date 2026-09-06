@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Add Expense - Expense Tracker{% endblock %}
+{% block content %}
+<h1>Add an expense</h1>
+<form method="post" action="/expenses">
+    <label for="amount">Amount</label>
+    <input type="number" step="any" min="0.01" id="amount" name="amount" value="{{ amount }}" required>
+    {% if errors.amount %}<p class="error">{{ errors.amount }}</p>{% endif %}
+
+    <label for="category_id">Category</label>
+    <select id="category_id" name="category_id" required>
+        <option value="" {% if not category_id %}selected{% endif %}>Select a category</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if category_id|string == category.id|string %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+    </select>
+    {% if errors.category_id %}<p class="error">{{ errors.category_id }}</p>{% endif %}
+
+    <label for="date">Date</label>
+    <input type="date" id="date" name="date" value="{{ today }}" readonly required>
+    {% if errors.date %}<p class="error">{{ errors.date }}</p>{% endif %}
+
+    <label for="description">Description (optional)</label>
+    <input type="text" id="description" name="description" value="{{ description }}">
+
+    <button type="submit">Save expense</button>
+</form>
+{% endblock %}

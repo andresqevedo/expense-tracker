@@ -182,6 +182,16 @@ budgeted amount and flags whether the category is over budget.
 3. **Given** a category with recorded expenses but no budget set, **When**
    the user views the budget comparison, **Then** that category is shown
    as having no budget rather than being compared against zero.
+4. **Given** a category with a budget set in a prior month and no expenses
+   yet recorded in a future month, **When** the user views that future
+   month's budget comparison, **Then** they see the budgeted amount
+   carried forward from the most recent prior month it was set in, with an
+   actual amount of 0.00 (not "no budget set").
+5. **Given** a category with a budget already set for the current month,
+   **When** the user submits a new budget amount for that same category
+   within the same month, **Then** the existing month's budget value is
+   updated in place rather than creating a duplicate history entry for
+   that month.
 
 ---
 
@@ -244,6 +254,11 @@ budgeted amount and flags whether the category is over budget.
   budget amount, with the new amount applying to the current month and any
   future month, while any past month keeps the budget amount that was
   active for that category during that month.
+- **FR-013a**: System MUST only allow a user to directly set/update a
+  budget for the current month; a future month's budgeted amount is never
+  entered directly and is determined solely by carrying forward the most
+  recently effective budget row (per FR-013), until the user sets a new
+  value once that month becomes current.
 - **FR-014**: System MUST allow a logged-in user to view, for a selected
   month and category, the budgeted amount, the actual amount spent, and
   the difference between them.

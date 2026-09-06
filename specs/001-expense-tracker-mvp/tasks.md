@@ -105,18 +105,18 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 > Write these tests FIRST; confirm they FAIL before implementation
 
-- [ ] T032 [P] [US2] Test `POST /expenses` saves an expense with a positive amount, category, and today's date, attributed to the logged-in user, in `tests/test_expenses.py::test_add_expense_success`
-- [ ] T033 [P] [US2] Test `POST /expenses` rejects a zero, negative, or missing amount with an explanatory error, in `tests/test_expenses.py::test_add_expense_invalid_amount`
-- [ ] T034 [P] [US2] Test `POST /expenses` rejects a submission with no category selected, in `tests/test_expenses.py::test_add_expense_missing_category`
-- [ ] T035 [P] [US2] Test `POST /expenses` rejects a future date, a past date, and a non-date value, in `tests/test_expenses.py::test_add_expense_invalid_date`
-- [ ] T036 [P] [US2] Test `POST /expenses` truncates an amount submitted with more than 2 decimal places to 2 decimal places rather than rejecting it (FR-007a; e.g. `12.345` → `12.34`), in `tests/test_expenses.py::test_add_expense_amount_truncation`
+- [X] T032 [P] [US2] Test `POST /expenses` saves an expense with a positive amount, category, and today's date, attributed to the logged-in user, in `tests/test_expenses.py::test_add_expense_success`
+- [X] T033 [P] [US2] Test `POST /expenses` rejects a zero, negative, or missing amount with an explanatory error, in `tests/test_expenses.py::test_add_expense_invalid_amount`
+- [X] T034 [P] [US2] Test `POST /expenses` rejects a submission with no category selected, in `tests/test_expenses.py::test_add_expense_missing_category`
+- [X] T035 [P] [US2] Test `POST /expenses` rejects a future date, a past date, and a non-date value, in `tests/test_expenses.py::test_add_expense_invalid_date`
+- [X] T036 [P] [US2] Test `POST /expenses` truncates an amount submitted with more than 2 decimal places to 2 decimal places rather than rejecting it (FR-007a; e.g. `12.345` → `12.34`), in `tests/test_expenses.py::test_add_expense_amount_truncation`
 
 ### Implementation for User Story 2
 
-- [ ] T037 [US2] Create `app/schemas/expense.py`: `ExpenseForm` validating positive amount (with truncation to 2 decimals per FR-007a), required category, date == today
-- [ ] T038 [US2] Implement `GET /expenses/new` and `POST /expenses` (create) in `app/routers/expenses.py`: category options from the `Category` table, insert `Expense` scoped to `current_user`, redirect to `/expenses`; re-render with field errors on validation failure (depends on: T012, T017, T037)
-- [ ] T039 [P] [US2] Create `app/templates/expense_form.html`
-- [ ] T040 [US2] Register the expenses router in `app/main.py` (depends on: T018, T038)
+- [X] T037 [US2] Create `app/schemas/expense.py`: `ExpenseForm` validating positive amount (with truncation to 2 decimals per FR-007a), required category, date == today
+- [X] T038 [US2] Implement `GET /expenses/new` and `POST /expenses` (create) in `app/routers/expenses.py`: category options from the `Category` table, insert `Expense` scoped to `current_user`, redirect to `/expenses`; re-render with field errors on validation failure (depends on: T012, T017, T037)
+- [X] T039 [P] [US2] Create `app/templates/expense_form.html`
+- [X] T040 [US2] Register the expenses router in `app/main.py` (depends on: T018, T038)
 
 **Checkpoint**: User Stories 1 AND 2 both work independently — register/login, then add an expense.
 
