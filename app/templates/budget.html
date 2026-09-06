@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Budgets - Expense Tracker{% endblock %}
+{% block content %}
+<h1>Budget vs. actual</h1>
+<form method="get" action="/budgets">
+    <label for="month">Month</label>
+    <input type="month" id="month" name="month" value="{{ month }}">
+    <button type="submit">View</button>
+</form>
+
+{% if rows %}
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Budgeted</th>
+            <th>Actual</th>
+            <th>Difference</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.category.name }}</td>
+            <td>{% if row.budgeted is not none %}{{ row.budgeted }}{% else %}no budget set{% endif %}</td>
+            <td>{{ row.actual }}</td>
+            <td>{% if row.difference is not none %}{{ row.difference }}{% endif %}</td>
+            <td class="status status-{{ row.status }}">
+                {% if row.status == "no_budget" %}no budget set
+                {% elif row.status == "over" %}over budget
+                {% elif row.status == "under" %}under budget
+                {% else %}on budget{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No budgets or expenses recorded for this month yet.</p>
+{% endif %}
+
+<h2>Set a budget</h2>
+<form method="post" action="/budgets">
+    <label for="category_id">Category</label>
+    <select id="category_id" name="category_id" required>
+        <option value="" {% if not form_category_id %}selected{% endif %}>Select a category</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if form_category_id|string == category.id|string %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+    </select>
+    {% if errors.category_id %}<p class="error">{{ errors.category_id }}</p>{% endif %}
+
+    <label for="amount">Monthly budget amount</label>
+    <input type="number" step="any" min="0.01" id="amount" name="amount" value="{{ form_amount }}" required>
+    {% if errors.amount %}<p class="error">{{ errors.amount }}</p>{% endif %}
+
+    <button type="submit">Save budget</button>
+</form>
+{% endblock %}

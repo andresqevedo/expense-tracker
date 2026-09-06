@@ -25,6 +25,12 @@
 - Q: Should a user be able to remove/unset a previously-set budget for a category (returning it to "no budget set"), or is that out of scope for the MVP? → A: Out of scope for the MVP; only setting/updating an amount is supported
 - Q: How should the system handle a user trying to access another user's expense/budget by guessing an identifier, given the current route design? → A: N/A by design — no MVP route accepts an expense/budget ID belonging to another user; list routes are always scoped to the current user and POST routes never take a target record ID, so no additional authorization check is needed
 
+### Session 2026-09-06
+
+- Q: Should the system allow a user to be logged in from more than one browser/device at the same time (concurrent sessions), or should a new login invalidate any previous session? → A: Allow — concurrent sessions are permitted; a new login issues an independent token and does not invalidate any previously issued token
+- Q: Should the system enforce an upper bound on an expense or budget amount, or is any positive value accepted (up to the storage column's own limit)? → A: No explicit cap — any positive amount is accepted, bounded only by the numeric(10,2) storage column's own range
+- Q: Should the spec mandate a specific bcrypt work factor (cost/rounds) for password hashing, or is that left to implementation discretion? → A: Leave to implementation discretion — no spec-level work-factor requirement; the library's default bcrypt cost is used as-is
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Register and Log In (Priority: P1)
@@ -275,8 +281,10 @@ budgeted amount and flags whether the category is over budget.
 - **Expense**: A single recorded transaction belonging to one user,
   consisting of an amount (a positive value stored with exactly 2 decimal
   places — a submitted value with more precision is rounded down to 2
-  decimal places rather than rejected), a category, a date, and an
-  optional description. Used to compute monthly per-category totals.
+  decimal places rather than rejected, with no spec-level upper bound
+  beyond the numeric(10,2) storage column's own range), a category, a
+  date, and an optional description. Used to compute monthly per-category
+  totals.
 - **Category**: A named grouping used to classify expenses and budgets.
   The fixed set, shared across all users and not owned by any one user, is
   exactly: Food, Transportation, Housing, Utilities, Entertainment, Health,
@@ -331,6 +339,12 @@ budgeted amount and flags whether the category is over budget.
 - Login sessions are backed by a JWT signed with HS256 and a 24-hour
   expiration; a user must log in again once their token expires, since no
   refresh-token mechanism is included in this MVP.
+- Concurrent sessions are permitted: a user may be logged in from more than
+  one browser or device at once, since each login issues an independent
+  token and no server-side session tracking or revocation list is included
+  in this MVP.
+- Password hashing uses the hashing library's default bcrypt work factor;
+  no spec-level minimum cost/rounds requirement is mandated for this MVP.
 - Each user's data (expenses and budgets) is private to that user; there is
   no sharing, household, or multi-user grouping in this MVP.
 - Standard web application expectations apply for performance and error

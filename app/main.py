@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.dependencies import NotAuthenticatedError
-from app.routers import auth, expenses, summary
+from app.routers import auth, budgets, expenses, summary
 from app.templating import APP_DIR
 
 
@@ -19,8 +19,7 @@ def create_app() -> FastAPI:
     fastapi_app.include_router(auth.router)
     fastapi_app.include_router(expenses.router)
     fastapi_app.include_router(summary.router)
-
-    # Further routers are registered here as each user story's implementation phase adds them.
+    fastapi_app.include_router(budgets.router)
 
     return fastapi_app
 

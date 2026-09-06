@@ -180,21 +180,21 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 > Write these tests FIRST; confirm they FAIL before implementation
 
-- [ ] T052 [P] [US5] Test `POST /budgets` sets a budget that applies to the current and future months, in `tests/test_budgets.py::test_set_budget`
-- [ ] T053 [P] [US5] Test `GET /budgets` shows budgeted amount, actual amount, difference, and a clear under/at/over status, in `tests/test_budgets.py::test_budget_comparison`
-- [ ] T054 [P] [US5] Test `GET /budgets` shows a category with expenses but no budget as "no budget set" rather than compared against zero, in `tests/test_budgets.py::test_budget_none_set`
-- [ ] T055 [P] [US5] Test `POST /budgets` submitted twice within the same month updates that month's value rather than creating a duplicate history entry, in `tests/test_budgets.py::test_budget_update_same_month`
-- [ ] T056 [P] [US5] Test updating a budget in the current month leaves a previously-viewed past month's resolved budget unchanged, in `tests/test_budgets.py::test_budget_history_preserves_past_month`
-- [ ] T057 [P] [US5] Test a budget amount submitted with more than 2 decimal places is truncated to 2 (FR-007a), in `tests/test_budgets.py::test_budget_amount_truncation`
-- [ ] T069 [P] [US5] Test `GET /budgets` for one user never includes another user's budgets or expense totals, in `tests/test_budgets.py::test_budget_isolation`
+- [X] T052 [P] [US5] Test `POST /budgets` sets a budget that applies to the current and future months, in `tests/test_budgets.py::test_set_budget`
+- [X] T053 [P] [US5] Test `GET /budgets` shows budgeted amount, actual amount, difference, and a clear under/at/over status, in `tests/test_budgets.py::test_budget_comparison`
+- [X] T054 [P] [US5] Test `GET /budgets` shows a category with expenses but no budget as "no budget set" rather than compared against zero, in `tests/test_budgets.py::test_budget_none_set`
+- [X] T055 [P] [US5] Test `POST /budgets` submitted twice within the same month updates that month's value rather than creating a duplicate history entry, in `tests/test_budgets.py::test_budget_update_same_month`
+- [X] T056 [P] [US5] Test updating a budget in the current month leaves a previously-viewed past month's resolved budget unchanged, in `tests/test_budgets.py::test_budget_history_preserves_past_month`
+- [X] T057 [P] [US5] Test a budget amount submitted with more than 2 decimal places is truncated to 2 (FR-007a), in `tests/test_budgets.py::test_budget_amount_truncation`
+- [X] T069 [P] [US5] Test `GET /budgets` for one user never includes another user's budgets or expense totals, in `tests/test_budgets.py::test_budget_isolation`
 
 ### Implementation for User Story 5
 
-- [ ] T058 [US5] Create `app/schemas/budget.py`: `BudgetForm` validating a positive amount (with truncation to 2 decimals per FR-007a) and a required category
-- [ ] T059 [US5] Implement the budget resolution helper in `app/routers/budgets.py` (or `app/services/budgets.py`): for a given user/category/month, select the row with the greatest `effective_month <= target month` (data-model.md § Budget resolution rule) (depends on: T013)
-- [ ] T060 [US5] Implement `GET /budgets` and `POST /budgets` in `app/routers/budgets.py`: `POST` upserts the current month's effective row; `GET` renders, per category, the resolved budget (via T059), actual monthly total (reusing the summary computation from T049), difference, and status (depends on: T017, T049, T058, T059)
-- [ ] T061 [P] [US5] Create `app/templates/budget.html`
-- [ ] T062 [US5] Register the budgets router in `app/main.py` (depends on: T018, T060)
+- [X] T058 [US5] Create `app/schemas/budget.py`: `BudgetForm` validating a positive amount (with truncation to 2 decimals per FR-007a) and a required category
+- [X] T059 [US5] Implement the budget resolution helper in `app/routers/budgets.py` (or `app/services/budgets.py`): for a given user/category/month, select the row with the greatest `effective_month <= target month` (data-model.md § Budget resolution rule) (depends on: T013)
+- [X] T060 [US5] Implement `GET /budgets` and `POST /budgets` in `app/routers/budgets.py`: `POST` upserts the current month's effective row; `GET` renders, per category, the resolved budget (via T059), actual monthly total (reusing the summary computation from T049), difference, and status (depends on: T017, T049, T058, T059)
+- [X] T061 [P] [US5] Create `app/templates/budget.html`
+- [X] T062 [US5] Register the budgets router in `app/main.py` (depends on: T018, T060)
 
 **Checkpoint**: All five user stories are independently functional — the full MVP is complete.
 

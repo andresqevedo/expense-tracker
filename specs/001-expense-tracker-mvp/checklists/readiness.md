@@ -19,9 +19,11 @@ complete.
 
 ## Security & Authentication Requirements
 
-- [ ] CHK001 Are password hashing algorithm requirements (e.g., minimum
+- [x] CHK001 Are password hashing algorithm requirements (e.g., minimum
       work factor) specified anywhere, or left entirely to implementation
-      discretion? [Gap, Spec §FR-001a, research.md §2]
+      discretion? [Gap, Spec §FR-001a, research.md §2] — Resolved
+      (Clarifications Session 2026-09-06): explicitly left to
+      implementation discretion; no spec-level work-factor requirement.
 - [x] CHK002 Is the JWT signing algorithm and token expiration/lifetime
       specified at the requirements level? [Gap, research.md §1]
 - [x] CHK003 Are requirements defined for what a user experiences when
@@ -33,9 +35,10 @@ complete.
 - [x] CHK005 Are logout requirements explicit that the auth credential
       (cookie) must be invalidated/cleared, not just that the user is
       redirected? [Completeness, Spec §FR-005]
-- [ ] CHK006 Are requirements defined for concurrent sessions (e.g.,
+- [x] CHK006 Are requirements defined for concurrent sessions (e.g.,
       logging in from a second browser) — explicitly allowed, or silent
-      on the question? [Gap, Edge Case]
+      on the question? [Gap, Edge Case] — Resolved (Clarifications
+      Session 2026-09-06): concurrent sessions are explicitly allowed.
 - [x] CHK007 Is the distinction between "not signed in" and "signed in as
       the wrong user" specified for a direct attempt to access another
       user's expense/budget by guessing an identifier? [Ambiguity, Spec
@@ -53,9 +56,11 @@ complete.
       precisely enough that a reviewer can classify any given input
       (accept/reject) without relying on an example that contradicts the
       stated rule? [Clarity, Spec §Clarifications]
-- [ ] CHK010 Is an upper bound on an expense/budget amount specified at
+- [x] CHK010 Is an upper bound on an expense/budget amount specified at
       the requirements level, or is `numeric(10,2)` purely an
-      implementation choice with no spec-level cap? [Gap]
+      implementation choice with no spec-level cap? [Gap] — Resolved
+      (Clarifications Session 2026-09-06): no explicit spec-level cap;
+      bounded only by the `numeric(10,2)` storage column's own range.
 
 ## Data Model & Business Rules — Budget History
 
@@ -111,10 +116,13 @@ complete.
       apply for performance" validated against any concrete latency or
       throughput requirement, or left fully open? [Assumption, Spec
       §Assumptions]
-- [ ] CHK022 Is the choice of bcrypt over other hashing algorithms
+- [x] CHK022 Is the choice of bcrypt over other hashing algorithms
       (research.md §2) traceable to a stated password-security
       requirement in the spec, or is it purely an implementation
       preference with no spec-level basis? [Traceability, research.md §2]
+      — Resolved (Clarifications Session 2026-09-06): the spec now states
+      the work factor is left to implementation discretion, so bcrypt's
+      library default is an accepted implementation choice, not a gap.
 
 ## Notes
 
@@ -130,3 +138,8 @@ complete.
   review (amount-precision wording in data-model.md, and the
   `.env.example`/`.env.default` naming mismatch in plan.md) — both fixed
   in data-model.md and plan.md
+- CHK001, CHK006, CHK010, and CHK022 were resolved via `/speckit-clarify`
+  Session 2026-09-06 (see spec.md § Clarifications and § Assumptions):
+  concurrent sessions are allowed, no spec-level amount cap is imposed,
+  and password hashing work factor is left to implementation discretion
+  — all matching the already-implemented code, so no rework was needed
