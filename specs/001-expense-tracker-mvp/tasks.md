@@ -132,14 +132,14 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 > Write these tests FIRST; confirm they FAIL before implementation
 
-- [ ] T041 [P] [US3] Test `GET /expenses` lists a user's expenses most-recent-first (date desc, then created_at desc), in `tests/test_expenses.py::test_list_expenses_order`
-- [ ] T042 [P] [US3] Test `GET /expenses` shows a clear empty state for a user with no recorded expenses, in `tests/test_expenses.py::test_list_expenses_empty`
-- [ ] T043 [P] [US3] Test `GET /expenses` for one user never includes another user's expenses, in `tests/test_expenses.py::test_list_expenses_isolation`
+- [X] T041 [P] [US3] Test `GET /expenses` lists a user's expenses most-recent-first (date desc, then created_at desc), in `tests/test_expenses.py::test_list_expenses_order`
+- [X] T042 [P] [US3] Test `GET /expenses` shows a clear empty state for a user with no recorded expenses, in `tests/test_expenses.py::test_list_expenses_empty`
+- [X] T043 [P] [US3] Test `GET /expenses` for one user never includes another user's expenses, in `tests/test_expenses.py::test_list_expenses_isolation`
 
 ### Implementation for User Story 3
 
-- [ ] T044 [US3] Implement `GET /expenses` (list) in `app/routers/expenses.py`: query `Expense` filtered to `current_user.id`, ordered by date desc/created_at desc (depends on: T012, T017, T038)
-- [ ] T045 [P] [US3] Extend `app/templates/expenses_list.html` with the populated list and empty-state markup
+- [X] T044 [US3] Implement `GET /expenses` (list) in `app/routers/expenses.py`: query `Expense` filtered to `current_user.id`, ordered by date desc/created_at desc (depends on: T012, T017, T038)
+- [X] T045 [P] [US3] Extend `app/templates/expenses_list.html` with the populated list and empty-state markup
 
 **Checkpoint**: User Stories 1–3 all work independently.
 

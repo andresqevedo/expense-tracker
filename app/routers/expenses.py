@@ -5,6 +5,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.dependencies import get_current_user, get_db
 from app.models.category import Category
@@ -45,6 +46,26 @@ async def _render_expense_form(
             "description": description or "",
             "today": _today(),
         },
+    )
+
+
+@router.get("/expenses")
+async def list_expenses(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Expense)
+        .options(selectinload(Expense.category))
+        .where(Expense.user_id == current_user.id)
+        .order_by(Expense.date.desc(), Expense.created_at.desc())
+    )
+    expenses = list(result.scalars().all())
+    return templates.TemplateResponse(
+        request=request,
+        name="expenses_list.html",
+        context={"expenses": expenses},
     )
 
 
