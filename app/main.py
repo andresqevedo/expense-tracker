@@ -1,15 +1,10 @@
-from pathlib import Path
-
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 from app.dependencies import NotAuthenticatedError
-
-APP_DIR = Path(__file__).resolve().parent
-
-templates = Jinja2Templates(directory=str(APP_DIR / "templates"))
+from app.routers import auth
+from app.templating import APP_DIR
 
 
 def create_app() -> FastAPI:
@@ -21,7 +16,9 @@ def create_app() -> FastAPI:
     async def handle_not_authenticated(request: Request, exc: NotAuthenticatedError) -> RedirectResponse:
         return RedirectResponse(url="/login", status_code=303)
 
-    # Routers are registered here as each user story's implementation phase adds them.
+    fastapi_app.include_router(auth.router)
+
+    # Further routers are registered here as each user story's implementation phase adds them.
 
     return fastapi_app
 

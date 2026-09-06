@@ -47,20 +47,20 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T007 Implement `app/config.py`: pydantic-settings `Settings` class reading `DATABASE_URL`, `JWT_SECRET_KEY`, `JWT_ALGORITHM` from the environment
-- [ ] T008 Implement `app/db/base.py` (declarative `Base`) and `app/db/session.py` (async engine from `Settings.DATABASE_URL`, `async_sessionmaker`)
-- [ ] T009 Initialize Alembic in async mode (`alembic/env.py` wired to `app.db.base.Base.metadata` and the async engine); configure `alembic.ini` to read `DATABASE_URL` from the environment
-- [ ] T010 [P] Create `User` model in `app/models/user.py` per data-model.md § User (UUID PK, unique email, password_hash, created_at)
-- [ ] T011 [P] Create `Category` model in `app/models/category.py` per data-model.md § Category (int PK, unique name)
-- [ ] T012 [P] Create `Expense` model in `app/models/expense.py` per data-model.md § Expense (UUID PK, user_id FK, category_id FK, amount numeric(10,2), date, description, created_at)
-- [ ] T013 [P] Create `Budget` model in `app/models/budget.py` per data-model.md § Budget (UUID PK, user_id FK, category_id FK, effective_month, amount numeric(10,2), created_at; unique on user_id+category_id+effective_month)
-- [ ] T014 Generate and write the initial Alembic migration `alembic/versions/0001_initial_schema.py` creating the users, categories, expenses, budgets tables and seeding the 7 fixed categories (Food, Transportation, Housing, Utilities, Entertainment, Health, Other) (depends on: T009, T010, T011, T012, T013)
-- [ ] T015 [P] Implement `app/security/passwords.py`: `hash_password` / `verify_password` using passlib bcrypt, enforcing the ≥8-char + letter + digit policy (FR-001a)
-- [ ] T016 [P] Implement `app/security/jwt.py`: `create_access_token`, `decode_access_token`, and a helper to extract the token from the `access_token` HttpOnly cookie (falling back to an `Authorization: Bearer` header) per research.md § 1
-- [ ] T017 Implement `app/dependencies.py`: `get_db` (yields an `AsyncSession`) and `get_current_user` (resolves the JWT via app/security/jwt.py and loads the `User`, raising/redirecting when absent or invalid) (depends on: T008, T016)
-- [ ] T018 Implement `app/main.py`: FastAPI app factory, Jinja2Templates + StaticFiles mounts, router registration placeholder, global exception handler stub (depends on: T007, T008)
-- [ ] T019 [P] Create `app/templates/base.html` (shared layout/nav) and `app/static/styles.css` (plain CSS)
-- [ ] T020 Implement `tests/conftest.py`: async engine/session fixtures against the real PostgreSQL service from `docker-compose.yml` (a dedicated test database), a fixture that runs Alembic migrations once per test session, per-test transaction rollback for isolation, and an `httpx.AsyncClient` (`ASGITransport`) fixture wired to the app with `get_db` overridden — per Constitution Principle II and research.md § 5 (depends on: T008, T014, T018)
+- [X] T007 Implement `app/config.py`: pydantic-settings `Settings` class reading `DATABASE_URL`, `JWT_SECRET_KEY`, `JWT_ALGORITHM` from the environment
+- [X] T008 Implement `app/db/base.py` (declarative `Base`) and `app/db/session.py` (async engine from `Settings.DATABASE_URL`, `async_sessionmaker`)
+- [X] T009 Initialize Alembic in async mode (`alembic/env.py` wired to `app.db.base.Base.metadata` and the async engine); configure `alembic.ini` to read `DATABASE_URL` from the environment
+- [X] T010 [P] Create `User` model in `app/models/user.py` per data-model.md § User (UUID PK, unique email, password_hash, created_at)
+- [X] T011 [P] Create `Category` model in `app/models/category.py` per data-model.md § Category (int PK, unique name)
+- [X] T012 [P] Create `Expense` model in `app/models/expense.py` per data-model.md § Expense (UUID PK, user_id FK, category_id FK, amount numeric(10,2), date, description, created_at)
+- [X] T013 [P] Create `Budget` model in `app/models/budget.py` per data-model.md § Budget (UUID PK, user_id FK, category_id FK, effective_month, amount numeric(10,2), created_at; unique on user_id+category_id+effective_month)
+- [X] T014 Generate and write the initial Alembic migration `alembic/versions/0001_initial_schema.py` creating the users, categories, expenses, budgets tables and seeding the 7 fixed categories (Food, Transportation, Housing, Utilities, Entertainment, Health, Other) (depends on: T009, T010, T011, T012, T013)
+- [X] T015 [P] Implement `app/security/passwords.py`: `hash_password` / `verify_password` using passlib bcrypt, enforcing the ≥8-char + letter + digit policy (FR-001a)
+- [X] T016 [P] Implement `app/security/jwt.py`: `create_access_token`, `decode_access_token`, and a helper to extract the token from the `access_token` HttpOnly cookie (falling back to an `Authorization: Bearer` header) per research.md § 1
+- [X] T017 Implement `app/dependencies.py`: `get_db` (yields an `AsyncSession`) and `get_current_user` (resolves the JWT via app/security/jwt.py and loads the `User`, raising/redirecting when absent or invalid) (depends on: T008, T016)
+- [X] T018 Implement `app/main.py`: FastAPI app factory, Jinja2Templates + StaticFiles mounts, router registration placeholder, global exception handler stub (depends on: T007, T008)
+- [X] T019 [P] Create `app/templates/base.html` (shared layout/nav) and `app/static/styles.css` (plain CSS)
+- [X] T020 Implement `tests/conftest.py`: async engine/session fixtures against the real PostgreSQL service from `docker-compose.yml` (a dedicated test database), a fixture that runs Alembic migrations once per test session, per-test transaction rollback for isolation, and an `httpx.AsyncClient` (`ASGITransport`) fixture wired to the app with `get_db` overridden — per Constitution Principle II and research.md § 5 (depends on: T008, T014, T018)
 
 **Checkpoint**: Foundation ready — `docker compose up --build`, `alembic upgrade head`, and an empty `pytest` collection all succeed. User story implementation can now begin.
 
@@ -76,20 +76,20 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 > Write these tests FIRST; confirm they FAIL before implementation (Constitution Principle I)
 
-- [ ] T021 [P] [US1] Test `POST /register` creates an account and signs the visitor in; a duplicate email is rejected with no duplicate account created, in `tests/test_auth.py::test_register_and_duplicate_email`
-- [ ] T022 [P] [US1] Test `POST /register` rejects a password under 8 characters, or missing a letter or digit, with an explanatory error and no account created, in `tests/test_auth.py::test_register_weak_password`
-- [ ] T023 [P] [US1] Test `POST /login` signs in a registered user with correct credentials and rejects an incorrect password with a generic (non-field-specific) error, in `tests/test_auth.py::test_login_success_and_failure`
-- [ ] T024 [P] [US1] Test `POST /logout` ends the session (subsequent request to a protected route is unauthenticated), in `tests/test_auth.py::test_logout`
-- [ ] T025 [P] [US1] Test a registered user's `id` is a server-generated identifier distinct from their email, in `tests/test_auth.py::test_user_id_not_email`
+- [X] T021 [P] [US1] Test `POST /register` creates an account and signs the visitor in; a duplicate email is rejected with no duplicate account created, in `tests/test_auth.py::test_register_and_duplicate_email`
+- [X] T022 [P] [US1] Test `POST /register` rejects a password under 8 characters, or missing a letter or digit, with an explanatory error and no account created, in `tests/test_auth.py::test_register_weak_password`
+- [X] T023 [P] [US1] Test `POST /login` signs in a registered user with correct credentials and rejects an incorrect password with a generic (non-field-specific) error, in `tests/test_auth.py::test_login_success_and_failure`
+- [X] T024 [P] [US1] Test `POST /logout` ends the session (subsequent request to a protected route is unauthenticated), in `tests/test_auth.py::test_logout`
+- [X] T025 [P] [US1] Test a registered user's `id` is a server-generated identifier distinct from their email, in `tests/test_auth.py::test_user_id_not_email`
 
 ### Implementation for User Story 1
 
-- [ ] T026 [US1] Create `app/schemas/auth.py`: `RegisterForm` (email + password, password policy validated) and `LoginForm` (email + password) Pydantic models
-- [ ] T027 [US1] Implement `GET /register` and `POST /register` in `app/routers/auth.py`: hash password (T015), insert `User`, set the JWT auth cookie, redirect to `/expenses`; re-render the form with field errors on duplicate email or weak password (depends on: T010, T015, T016, T026)
-- [ ] T028 [US1] Implement `GET /login` and `POST /login` in `app/routers/auth.py`: verify credentials, set the JWT auth cookie, redirect to `/expenses`; re-render with a generic error on failure (depends on: T010, T015, T016, T026)
-- [ ] T029 [US1] Implement `POST /logout` in `app/routers/auth.py`: clear the auth cookie, redirect to `/login` (depends on: T017)
-- [ ] T030 [P] [US1] Create `app/templates/register.html` and `app/templates/login.html`
-- [ ] T031 [US1] Register the auth router in `app/main.py` (depends on: T018, T027, T028, T029)
+- [X] T026 [US1] Create `app/schemas/auth.py`: `RegisterForm` (email + password, password policy validated) and `LoginForm` (email + password) Pydantic models
+- [X] T027 [US1] Implement `GET /register` and `POST /register` in `app/routers/auth.py`: hash password (T015), insert `User`, set the JWT auth cookie, redirect to `/expenses`; re-render the form with field errors on duplicate email or weak password (depends on: T010, T015, T016, T026)
+- [X] T028 [US1] Implement `GET /login` and `POST /login` in `app/routers/auth.py`: verify credentials, set the JWT auth cookie, redirect to `/expenses`; re-render with a generic error on failure (depends on: T010, T015, T016, T026)
+- [X] T029 [US1] Implement `POST /logout` in `app/routers/auth.py`: clear the auth cookie, redirect to `/login` (depends on: T017)
+- [X] T030 [P] [US1] Create `app/templates/register.html` and `app/templates/login.html`
+- [X] T031 [US1] Register the auth router in `app/main.py` (depends on: T018, T027, T028, T029)
 
 **Checkpoint**: User Story 1 is fully functional and independently testable — register, log out, log back in.
 

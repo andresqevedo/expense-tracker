@@ -24,3 +24,18 @@ through the following skills, generally in order:
 7. `speckit-converge` — reconcile the codebase against spec/plan/tasks
 
 Feature artifacts are stored under `.specify/`.
+
+## Docker Test Workflow
+
+Per Constitution Principle II, tests run against the real PostgreSQL service, not
+mocks — so a docker compose stack is brought up for each test run:
+
+```
+docker compose up -d --build
+docker compose exec app pytest
+```
+
+Once the suite passes, tear the stack down with `docker compose down` so no
+containers are left running in the background. If the suite fails, leave the
+stack up so the `db`/`app` containers and logs are available for debugging —
+only tear down after a fix produces a passing run.
