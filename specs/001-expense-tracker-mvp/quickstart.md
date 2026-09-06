@@ -18,13 +18,11 @@ and route-level detail.
 docker compose up --build
 ```
 
-This starts the `db` (PostgreSQL 16) and `app` (FastAPI) services. On
-first boot, apply migrations (creates `users`, `categories`, `expenses`,
-`budgets` and seeds the 7 fixed categories):
-
-```bash
-docker compose exec app alembic upgrade head
-```
+This starts the `db` (PostgreSQL 16) and `app` (FastAPI) services. The
+`app` container's entrypoint runs `alembic upgrade head` automatically
+before starting the server, creating `users`, `categories`, `expenses`,
+`budgets` and seeding the 7 fixed categories on first boot (a no-op on
+later restarts once already up to date).
 
 The app is now reachable at `http://localhost:8000`.
 
