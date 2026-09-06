@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_current_user, get_db
+from app.form_errors import field_errors
 from app.models.user import User
 from app.schemas.auth import LoginForm, RegisterForm
 from app.security.jwt import ACCESS_TOKEN_COOKIE_NAME, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
@@ -42,11 +43,10 @@ async def register_submit(request: Request, db: AsyncSession = Depends(get_db)):
     try:
         data = RegisterForm(email=email_raw, password=password_raw)
     except ValidationError as exc:
-        errors = {str(err["loc"][0]): err["msg"] for err in exc.errors()}
         return templates.TemplateResponse(
             request=request,
             name="register.html",
-            context={"errors": errors, "email": email_raw},
+            context={"errors": field_errors(exc), "email": email_raw},
         )
 
     existing = await db.scalar(select(User).where(User.email == data.email))

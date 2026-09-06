@@ -204,11 +204,11 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 **Purpose**: Improvements that span multiple user stories
 
-- [ ] T063 [P] Implement a shared form-validation-error rendering pattern (e.g. a Jinja2 macro/exception handler) in `app/main.py` so every `POST` route re-renders its form with field errors consistently
-- [ ] T064 [P] Audit every route in `app/routers/*.py` to confirm all reads/writes are scoped to `current_user.id` (FR-010) — no route accepts another user's identifier for expenses or budgets
-- [ ] T065 Run the [quickstart.md](./quickstart.md) validation scenarios end-to-end against `docker compose up --build`
-- [ ] T066 [P] Confirm `docker compose up --build` requires no host dependency beyond Docker (Constitution Principle V) — fresh clone + `.env` from `.env.example` only
-- [ ] T067 Run the full `pytest` suite via `docker compose exec app pytest` against the real PostgreSQL service and confirm all tests pass (Constitution Principle II)
+- [X] T063 [P] Implement a shared form-validation-error rendering pattern (e.g. a Jinja2 macro/exception handler) in `app/main.py` so every `POST` route re-renders its form with field errors consistently
+- [X] T064 [P] Audit every route in `app/routers/*.py` to confirm all reads/writes are scoped to `current_user.id` (FR-010) — no route accepts another user's identifier for expenses or budgets
+- [X] T065 Run the [quickstart.md](./quickstart.md) validation scenarios end-to-end against `docker compose up --build`
+- [X] T066 [P] Confirm `docker compose up --build` requires no host dependency beyond Docker (Constitution Principle V) — fresh clone + `.env` from `.env.example` only
+- [X] T067 Run the full `pytest` suite via `docker compose exec app pytest` against the real PostgreSQL service and confirm all tests pass (Constitution Principle II)
 
 ---
 

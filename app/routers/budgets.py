@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_current_user, get_db
+from app.form_errors import field_errors
 from app.models.budget import Budget
 from app.models.category import Category
 from app.models.expense import Expense
@@ -114,13 +115,12 @@ async def set_budget(
     try:
         data = BudgetForm.model_validate({"category_id": category_id_raw, "amount": amount_raw})
     except ValidationError as exc:
-        errors = {str(err["loc"][0]): err["msg"] for err in exc.errors()}
         return await budget_comparison(
             request,
             None,
             current_user,
             db,
-            errors=errors,
+            errors=field_errors(exc),
             form_category_id=category_id_raw,
             form_amount=amount_raw,
         )

@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.dependencies import get_current_user, get_db
+from app.form_errors import field_errors
 from app.models.category import Category
 from app.models.expense import Expense
 from app.models.user import User
@@ -101,8 +102,9 @@ async def create_expense(
             }
         )
     except ValidationError as exc:
-        errors = {str(err["loc"][0]): err["msg"] for err in exc.errors()}
-        return await _render_expense_form(request, db, errors, amount_raw, category_id_raw, description_value)
+        return await _render_expense_form(
+            request, db, field_errors(exc), amount_raw, category_id_raw, description_value
+        )
 
     category = await db.get(Category, data.category_id)
     if category is None:
