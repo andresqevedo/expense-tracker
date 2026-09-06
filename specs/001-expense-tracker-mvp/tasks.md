@@ -155,16 +155,16 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 
 > Write these tests FIRST; confirm they FAIL before implementation
 
-- [ ] T046 [P] [US4] Test `GET /summary` returns the correct per-category sum for the current month across multiple categories, in `tests/test_summary.py::test_summary_totals`
-- [ ] T047 [P] [US4] Test `GET /summary?month=YYYY-MM` recalculates totals for a selected past month, in `tests/test_summary.py::test_summary_month_switch`
-- [ ] T048 [P] [US4] Test `GET /summary` shows a clear empty state (no category totals) for a month with no expenses, in `tests/test_summary.py::test_summary_empty_month`
-- [ ] T068 [P] [US4] Test `GET /summary` for one user never includes another user's expenses in its totals, in `tests/test_summary.py::test_summary_isolation`
+- [X] T046 [P] [US4] Test `GET /summary` returns the correct per-category sum for the current month across multiple categories, in `tests/test_summary.py::test_summary_totals`
+- [X] T047 [P] [US4] Test `GET /summary?month=YYYY-MM` recalculates totals for a selected past month, in `tests/test_summary.py::test_summary_month_switch`
+- [X] T048 [P] [US4] Test `GET /summary` shows a clear empty state (no category totals) for a month with no expenses, in `tests/test_summary.py::test_summary_empty_month`
+- [X] T068 [P] [US4] Test `GET /summary` for one user never includes another user's expenses in its totals, in `tests/test_summary.py::test_summary_isolation`
 
 ### Implementation for User Story 4
 
-- [ ] T049 [US4] Implement `GET /summary` in `app/routers/summary.py`: `SUM(amount)` grouped by `category_id`, filtered to `current_user.id` and the selected month (default current month), joined to category names (depends on: T012, T017)
-- [ ] T050 [P] [US4] Create `app/templates/summary.html`
-- [ ] T051 [US4] Register the summary router in `app/main.py` (depends on: T018, T049)
+- [X] T049 [US4] Implement `GET /summary` in `app/routers/summary.py`: `SUM(amount)` grouped by `category_id`, filtered to `current_user.id` and the selected month (default current month), joined to category names (depends on: T012, T017)
+- [X] T050 [P] [US4] Create `app/templates/summary.html`
+- [X] T051 [US4] Register the summary router in `app/main.py` (depends on: T018, T049)
 
 **Checkpoint**: User Stories 1–4 all work independently.
 

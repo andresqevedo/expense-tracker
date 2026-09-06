@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Monthly Summary - Expense Tracker{% endblock %}
+{% block content %}
+<h1>Monthly summary</h1>
+<form method="get" action="/summary">
+    <label for="month">Month</label>
+    <input type="month" id="month" name="month" value="{{ month }}">
+    <button type="submit">View</button>
+</form>
+{% if totals %}
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for name, total in totals %}
+        <tr>
+            <td>{{ name }}</td>
+            <td>{{ total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">You haven't recorded any expenses for this month.</p>
+{% endif %}
+{% endblock %}
