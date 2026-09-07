@@ -28,7 +28,12 @@ COPY alembic.ini ./alembic.ini
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x entrypoint.sh
 
+RUN groupadd --system app && useradd --system --gid app --home-dir /app --no-create-home app \
+    && chown -R app:app /app
+
 ENV PATH="/app/.venv/bin:$PATH"
+
+USER app
 
 EXPOSE 8000
 
@@ -48,7 +53,12 @@ COPY alembic.ini ./alembic.ini
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x entrypoint.sh
 
+RUN groupadd --system app && useradd --system --gid app --home-dir /app --no-create-home app \
+    && chown -R app:app /app
+
 ENV PATH="/app/.venv/bin:$PATH"
+
+USER app
 
 EXPOSE 8000
 
