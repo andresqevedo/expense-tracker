@@ -208,7 +208,7 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 - [X] T064 [P] Audit every route in `app/routers/*.py` to confirm all reads/writes are scoped to `current_user.id` (FR-010) — no route accepts another user's identifier for expenses or budgets
 - [X] T065 Run the [quickstart.md](./quickstart.md) validation scenarios end-to-end against `docker compose up --build`
 - [X] T066 [P] Confirm `docker compose up --build` requires no host dependency beyond Docker (Constitution Principle V) — fresh clone + `.env` from `.env.example` only
-- [X] T067 Run the full `pytest` suite via `docker compose exec app pytest` against the real PostgreSQL service and confirm all tests pass (Constitution Principle II)
+- [X] T067 Run the full `pytest` suite via `docker compose --profile test run --rm --build test pytest` against the real PostgreSQL service and confirm all tests pass (Constitution Principle II)
 
 ---
 

@@ -79,8 +79,20 @@ The app is now reachable at `http://localhost:8000`.
 ## Automated tests
 
 ```bash
-docker compose exec app pytest
+docker compose --profile test run --rm --build test pytest
 ```
 
-Per Constitution Principle II, these run against the real PostgreSQL
-service defined in `docker-compose.yml` — no SQLite or mocked DB layer.
+The `app` service builds the lean `final` Dockerfile stage (no compiler, no
+dev dependencies, no test files) and cannot run pytest; the `test` service
+builds the `test` stage (adds the `dev` extras and `tests/`) and is gated
+behind the `test` Compose profile so it never starts on a plain
+`docker compose up`. `run` starts `db` (waiting for its healthcheck) if it
+isn't already up and propagates pytest's real exit code; `--rm` cleans up
+the test container afterward. Per Constitution Principle II, these run
+against the real PostgreSQL service defined in `docker-compose.yml`, in a
+dedicated `expense_tracker_test` database created and migrated by
+`tests/conftest.py`, not SQLite or a mocked DB layer.
+
+Once the suite passes, stop `db` with `docker compose stop` (not `down`,
+which would remove the container) so nothing is left running in the
+background.
