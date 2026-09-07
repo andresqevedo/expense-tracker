@@ -12,20 +12,39 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-install-project --no-editable --extra dev
+RUN uv sync --frozen --no-install-project --no-editable
+
+COPY app ./app
+RUN uv sync --frozen --no-editable
 
 
-FROM python:3.12-slim
+FROM builder AS test
+
+COPY tests ./tests
+RUN uv sync --frozen --no-editable --extra dev
+
+COPY alembic ./alembic
+COPY alembic.ini ./alembic.ini
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x entrypoint.sh
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+EXPOSE 8000
+
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+FROM python:3.12-slim AS final
 
 WORKDIR /app
 
 COPY --from=builder /app/.venv ./.venv
 
 COPY pyproject.toml ./pyproject.toml
-COPY app ./app
 COPY alembic ./alembic
 COPY alembic.ini ./alembic.ini
-COPY tests ./tests
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x entrypoint.sh
 

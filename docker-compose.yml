@@ -18,6 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: final
     restart: unless-stopped
     env_file:
       - .env
@@ -26,6 +27,18 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    profiles: [ "test" ]
 
 volumes:
   db_data:

@@ -28,15 +28,20 @@ Feature artifacts are stored under `.specify/`.
 ## Docker Test Workflow
 
 Per Constitution Principle II, tests run against the real PostgreSQL service, not
-mocks — so a docker compose stack is brought up for each test run:
+mocks — so a docker compose stack is brought up for each test run. The `app`
+service builds the lean `final` Dockerfile stage (no compiler, no dev
+dependencies, no test files) and is not equipped to run pytest; a separate
+`test` service builds the `test` stage (adds the `dev` extras and `tests/`) and
+is gated behind the `test` compose profile so it never starts on a plain
+`docker compose up`:
 
 ```
-docker compose up -d --build
-docker compose exec app pytest
+docker compose --profile test up -d --build test
+docker compose exec test pytest
 ```
 
 Once the suite passes, stop the stack with `docker compose stop` so no
 containers are left running in the background — do NOT use `docker compose
 down`, which removes the containers rather than just stopping them. If the
-suite fails, leave the stack up so the `db`/`app` containers and logs are
+suite fails, leave the stack up so the `db`/`test` containers and logs are
 available for debugging — only stop it after a fix produces a passing run.
