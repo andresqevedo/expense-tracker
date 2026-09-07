@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
@@ -9,12 +9,19 @@ RUN apt-get update \
 COPY --from=ghcr.io/astral-sh/uv:0.12.6 /uv /uvx /usr/local/bin/
 
 ENV UV_COMPILE_BYTECODE=1 \
-    UV_LINK_MODE=copy \
-    PATH="/app/.venv/bin:$PATH"
+    UV_LINK_MODE=copy
 
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project --no-editable --extra dev
 
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY --from=builder /app/.venv ./.venv
+
+COPY pyproject.toml ./pyproject.toml
 COPY app ./app
 COPY alembic ./alembic
 COPY alembic.ini ./alembic.ini
@@ -22,7 +29,7 @@ COPY tests ./tests
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x entrypoint.sh
 
-RUN uv sync --frozen --no-editable --extra dev
+ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 
