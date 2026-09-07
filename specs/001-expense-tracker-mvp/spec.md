@@ -31,6 +31,12 @@
 - Q: Should the system enforce an upper bound on an expense or budget amount, or is any positive value accepted (up to the storage column's own limit)? → A: No explicit cap — any positive amount is accepted, bounded only by the numeric(10,2) storage column's own range
 - Q: Should the spec mandate a specific bcrypt work factor (cost/rounds) for password hashing, or is that left to implementation discretion? → A: Leave to implementation discretion — no spec-level work-factor requirement; the library's default bcrypt cost is used as-is
 
+### Session 2026-09-07
+
+- Q: How should the "under 2 minutes" (SC-001) and "under 30 seconds" (SC-002) targets be verified? → A: Verified automatically: a test asserts server-side response latency stays under a fixed budget, as a proxy metric rather than literal human-completion time
+- Q: What server-side response latency budget should the automated SC-001/SC-002 tests enforce? → A: 200ms per request
+- Q: How should the /register latency test's conflict with bcrypt's inherent hashing cost be resolved? → A: Raise the budget for password-hashing routes (register, login) to 500ms; bcrypt work factor stays at the library default; the 200ms default budget still applies to non-hashing routes such as /expenses
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Register and Log In (Priority: P1)
@@ -301,9 +307,17 @@ budgeted amount and flags whether the category is over budget.
 ### Measurable Outcomes
 
 - **SC-001**: A new visitor can register an account and reach their
-  (empty) expense list in under 2 minutes.
+  (empty) expense list in under 2 minutes. Verified automatically: a test
+  asserts the `POST /register` request's server-side response time stays
+  under 500ms (a proxy metric per Clarifications 2026-09-07, since full
+  human UI interaction is not automated; this route's budget is higher
+  than the 200ms default because it hashes the password with bcrypt, an
+  intentionally expensive operation).
 - **SC-002**: A logged-in user can record a new expense in under 30
   seconds from opening the add-expense action to seeing it confirmed.
+  Verified automatically: a test asserts the `POST /expenses` request's
+  server-side response time stays under 200ms (same proxy-metric approach
+  as SC-001).
 - **SC-003**: 100% of a user's recorded expenses for a given month are
   reflected in that month's category totals, with no discrepancy between
   the sum of individual expenses and the displayed total.
@@ -347,6 +361,10 @@ budgeted amount and flags whether the category is over budget.
   no spec-level minimum cost/rounds requirement is mandated for this MVP.
 - Each user's data (expenses and budgets) is private to that user; there is
   no sharing, household, or multi-user grouping in this MVP.
-- Standard web application expectations apply for performance and error
-  handling (fast responses, friendly validation messages) unless otherwise
-  specified.
+- Server-side response latency is expected to stay under 200ms per request
+  under MVP-scale load (see SC-002), except for password-hashing routes
+  (register, login), which stay under 500ms to accommodate bcrypt's
+  intentionally expensive hashing cost (see SC-001). Friendly validation
+  messages are expected for all rejected submissions. No throughput,
+  concurrency, or scalability target beyond these per-request latency
+  budgets is specified for this MVP.

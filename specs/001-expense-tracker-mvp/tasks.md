@@ -209,6 +209,8 @@ Single backend project (no separate frontend — see plan.md § Structure Decisi
 - [X] T065 Run the [quickstart.md](./quickstart.md) validation scenarios end-to-end against `docker compose up --build`
 - [X] T066 [P] Confirm `docker compose up --build` requires no host dependency beyond Docker (Constitution Principle V) — fresh clone + `.env` from `.env.example` only
 - [X] T067 Run the full `pytest` suite via `docker compose --profile test run --rm --build test pytest` against the real PostgreSQL service and confirm all tests pass (Constitution Principle II)
+- [X] T070 [P] Test `POST /register` server-side response time stays under 500ms, the password-hashing-route budget (SC-001, Clarifications 2026-09-07), in `tests/test_auth.py::test_register_latency_budget`
+- [X] T071 [P] Test `POST /expenses` server-side response time stays under 200ms (SC-002, Clarifications 2026-09-07), in `tests/test_expenses.py::test_add_expense_latency_budget`
 
 ---
 

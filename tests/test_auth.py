@@ -1,3 +1,4 @@
+import time
 import uuid
 
 from sqlalchemy import select
@@ -97,3 +98,19 @@ async def test_user_id_not_email(client, db_session):
     assert user is not None
     assert isinstance(user.id, uuid.UUID)
     assert str(user.id) != user.email
+
+
+async def test_register_latency_budget(client, db_session):
+    start = time.perf_counter()
+    response = await client.post(
+        "/register",
+        data={"email": "latency-user@example.com", "password": "Password1"},
+    )
+    elapsed_ms = (time.perf_counter() - start) * 1000
+
+    assert response.status_code == 302
+    assert elapsed_ms < 500, (
+        f"POST /register took {elapsed_ms:.1f}ms, exceeding the 500ms budget (SC-001). "
+        "This route hashes the password with bcrypt, so it gets the higher "
+        "password-hashing-route budget rather than the 200ms default."
+    )

@@ -2,9 +2,9 @@
 
 **Purpose**: Validate the requirements quality (completeness, clarity,
 consistency, measurability) of the spec/plan/data-model for the two
-highest-risk, most-novel areas of this feature — authentication/security
-and the data-model business rules (budget history, amount precision, date
-validation) — before proceeding to `/speckit-tasks`.
+highest-risk, most-novel areas of this feature (authentication/security
+and the data-model business rules: budget history, amount precision, date
+validation) before proceeding to `/speckit-tasks`.
 **Created**: 2026-08-27
 **Feature**: [spec.md](../spec.md) | [plan.md](../plan.md) | [data-model.md](../data-model.md)
 
@@ -21,7 +21,7 @@ complete.
 
 - [x] CHK001 Are password hashing algorithm requirements (e.g., minimum
       work factor) specified anywhere, or left entirely to implementation
-      discretion? [Gap, Spec §FR-001a, research.md §2] — Resolved
+      discretion? [Gap, Spec §FR-001a, research.md §2]. Resolved
       (Clarifications Session 2026-09-06): explicitly left to
       implementation discretion; no spec-level work-factor requirement.
 - [x] CHK002 Is the JWT signing algorithm and token expiration/lifetime
@@ -36,20 +36,20 @@ complete.
       (cookie) must be invalidated/cleared, not just that the user is
       redirected? [Completeness, Spec §FR-005]
 - [x] CHK006 Are requirements defined for concurrent sessions (e.g.,
-      logging in from a second browser) — explicitly allowed, or silent
-      on the question? [Gap, Edge Case] — Resolved (Clarifications
+      logging in from a second browser): explicitly allowed, or silent
+      on the question? [Gap, Edge Case]. Resolved (Clarifications
       Session 2026-09-06): concurrent sessions are explicitly allowed.
 - [x] CHK007 Is the distinction between "not signed in" and "signed in as
       the wrong user" specified for a direct attempt to access another
       user's expense/budget by guessing an identifier? [Ambiguity, Spec
       Edge Cases, §FR-010]
 
-## Data Model & Business Rules — Amount Precision
+## Data Model & Business Rules: Amount Precision
 
 - [x] CHK008 Do the spec's amount-precision requirement and the
       data-model's own example agree on whether excess precision is
       rejected or rounded? [Conflict, Spec §FR-007a/Clarifications,
-      data-model.md §Expense] — Resolved: the rule is round down
+      data-model.md §Expense]. Resolved: the rule is round down
       (truncate) to 2 decimal places, not reject; spec.md (FR-007a),
       data-model.md, and contracts/web-routes.md now agree.
 - [x] CHK009 Is "expressible in exactly 2 decimal places" defined
@@ -58,11 +58,11 @@ complete.
       stated rule? [Clarity, Spec §Clarifications]
 - [x] CHK010 Is an upper bound on an expense/budget amount specified at
       the requirements level, or is `numeric(10,2)` purely an
-      implementation choice with no spec-level cap? [Gap] — Resolved
+      implementation choice with no spec-level cap? [Gap]. Resolved
       (Clarifications Session 2026-09-06): no explicit spec-level cap;
       bounded only by the `numeric(10,2)` storage column's own range.
 
-## Data Model & Business Rules — Budget History
+## Data Model & Business Rules: Budget History
 
 - [x] CHK011 Is it specified whether a user can set a budget for a future
       month directly, or is "applies to current and future months" solely
@@ -80,31 +80,38 @@ complete.
       the existing month's value rather than creating a duplicate)? [Gap,
       Coverage, Spec §US5]
 
-## Data Model & Business Rules — Date Validation
+## Data Model & Business Rules: Date Validation
 
 - [x] CHK015 Is "today" defined against a specific time zone (server UTC
       vs. the user's local time) for the "date must equal the current day"
       rule? [Ambiguity, Spec §FR-007]
-- [ ] CHK016 Is behavior specified for a submission that straddles
+- [x] CHK016 Is behavior specified for a submission that straddles
       midnight (begins before, completes after the date rolls over)?
-      [Edge Case, Gap]
+      [Edge Case, Gap]. Resolved: FR-007 validates against "the server's
+      UTC calendar day at submission time," a single instant evaluated when
+      the request is processed, not a start/end interval, so there is no
+      straddling window to specify behavior for.
 
 ## Cross-Artifact Consistency
 
 - [x] CHK017 Does the plan name the same gitignored environment file
       consistently across its Constitution Check and Project Structure
       sections? [Consistency, plan.md §Constitution Check, §Project
-      Structure] — Resolved: Constitution Check corrected to `.env.example`
+      Structure]. Resolved: Constitution Check corrected to `.env.example`
       to match Project Structure.
 - [x] CHK018 Are the 7 fixed category values referenced identically (same
       names) across spec.md, data-model.md, and research.md? [Consistency]
 
 ## Acceptance Criteria Quality
 
-- [ ] CHK019 Are the "under 2 minutes" (SC-001) and "under 30 seconds"
+- [x] CHK019 Are the "under 2 minutes" (SC-001) and "under 30 seconds"
       (SC-002) targets paired with a defined measurement method (e.g.,
       wall-clock from page load to confirmation), or stated without one?
-      [Measurability, Spec §SC-001, §SC-002]
+      [Measurability, Spec §SC-001, §SC-002]. Resolved (Clarifications
+      Session 2026-09-07): verified automatically via a test asserting the
+      relevant request's server-side response time stays under a fixed
+      budget (500ms for password-hashing routes, 200ms otherwise), as a
+      proxy metric for the human-facing target.
 - [x] CHK020 Is "0% of expenses or budgets... visible to another account"
       (SC-005) paired with a defined verification method (e.g., which
       test scenarios are sufficient to claim this is met)? [Measurability,
@@ -112,15 +119,19 @@ complete.
 
 ## Dependencies & Assumptions
 
-- [ ] CHK021 Is the assumption that "standard web application expectations
+- [x] CHK021 Is the assumption that "standard web application expectations
       apply for performance" validated against any concrete latency or
       throughput requirement, or left fully open? [Assumption, Spec
-      §Assumptions]
+      §Assumptions]. Resolved (Clarifications Session 2026-09-07): the
+      vague phrase was replaced with concrete per-request server-side
+      latency budgets (200ms by default, 500ms for password-hashing
+      routes); no throughput/concurrency/scalability target is specified
+      beyond them.
 - [x] CHK022 Is the choice of bcrypt over other hashing algorithms
       (research.md §2) traceable to a stated password-security
       requirement in the spec, or is it purely an implementation
-      preference with no spec-level basis? [Traceability, research.md §2]
-      — Resolved (Clarifications Session 2026-09-06): the spec now states
+      preference with no spec-level basis? [Traceability, research.md §2].
+      Resolved (Clarifications Session 2026-09-06): the spec now states
       the work factor is left to implementation discretion, so bcrypt's
       library default is an accepted implementation choice, not a gap.
 
@@ -136,10 +147,22 @@ complete.
   maintained by `/speckit-specify` and `/speckit-clarify`
 - CHK008 and CHK017 surfaced concrete conflicts found on disk during this
   review (amount-precision wording in data-model.md, and the
-  `.env.example`/`.env.default` naming mismatch in plan.md) — both fixed
+  `.env.example`/`.env.default` naming mismatch in plan.md); both fixed
   in data-model.md and plan.md
 - CHK001, CHK006, CHK010, and CHK022 were resolved via `/speckit-clarify`
   Session 2026-09-06 (see spec.md § Clarifications and § Assumptions):
   concurrent sessions are allowed, no spec-level amount cap is imposed,
-  and password hashing work factor is left to implementation discretion
-  — all matching the already-implemented code, so no rework was needed
+  and password hashing work factor is left to implementation discretion,
+  all matching the already-implemented code, so no rework was needed
+- CHK019 and CHK021 were resolved via `/speckit-clarify` Session 2026-09-07
+  (see spec.md § Clarifications and § Assumptions): SC-001/SC-002 are now
+  verified by an automated server-side latency assertion, and the vague
+  "standard web application expectations" performance assumption was
+  replaced with that same concrete budget. The initial 200ms-everywhere
+  budget conflicted with bcrypt's intentionally expensive hashing cost on
+  `POST /register` (confirmed by a failing test during implementation), so
+  password-hashing routes (register, login) got a separate 500ms budget
+  while other routes (e.g. `/expenses`) kept 200ms. CHK016 was resolved by
+  review (no spec change needed): FR-007 already validates against a
+  single submission-time instant, so no midnight-straddling window exists
+  to specify behavior for.

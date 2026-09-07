@@ -1,3 +1,4 @@
+import time
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
@@ -118,6 +119,23 @@ async def test_add_expense_amount_truncation(client, db_session):
     expense = await db_session.scalar(select(Expense).where(Expense.user_id == user.id))
     assert expense is not None
     assert expense.amount == Decimal("12.34")
+
+
+async def test_add_expense_latency_budget(client, db_session):
+    await _create_logged_in_user(client, db_session, "latency-expense@example.com")
+    category_id = await _get_category_id(db_session)
+
+    start = time.perf_counter()
+    response = await client.post(
+        "/expenses",
+        data={"amount": "10.00", "category_id": str(category_id), "date": date.today().isoformat()},
+    )
+    elapsed_ms = (time.perf_counter() - start) * 1000
+
+    assert response.status_code == 302
+    assert elapsed_ms < 200, (
+        f"POST /expenses took {elapsed_ms:.1f}ms, exceeding the 200ms budget (SC-002)"
+    )
 
 
 async def test_list_expenses_order(client, db_session):
